@@ -1,58 +1,48 @@
 export default async function decorate(block) {
-  const path = block.querySelector('strong')?.textContent.trim();
+  // Get the folder/path configured in DA.live
+  const path = block.textContent.trim();
 
-  console.log('List path:', path);
+  console.log('Configured path:', path);
 
   if (!path) {
     block.innerHTML = '<p>List path is not configured.</p>';
     return;
   }
 
+  // Load the index
   const response = await fetch('/list-index.json');
 
   if (!response.ok) {
-    block.innerHTML = '<p>Unable to load content.</p>';
+    block.innerHTML = '<p>Unable to load list index.</p>';
     return;
   }
 
   const data = await response.json();
 
+  console.log('List index:', data);
+
+  // Get indexed pages under the configured path
   const items = (data.data || []).filter((item) => {
-    return item.path.startsWith(path);
+    return item.path && item.path.startsWith(path);
   });
 
-  console.log('Filtered items:', items);
+  console.log('Matching paths:', items);
 
   if (!items.length) {
-    block.innerHTML = '<p>No content found.</p>';
+    block.innerHTML = '<p>No paths found.</p>';
     return;
   }
 
+  // Display the paths
   block.innerHTML = `
-    <div class="list-grid">
+    <ul class="path-list">
       ${items.map((item) => `
-        <article class="list-card">
-
-          ${item.image
-            ? `<img src="${item.image}" alt="${item.title || ''}">`
-            : ''}
-
-          <div class="list-card-content">
-
-            <h3>${item.title || 'Untitled'}</h3>
-
-            ${item.description
-              ? `<p>${item.description}</p>`
-              : ''}
-
-            <a href="${item.path}">
-              View
-            </a>
-
-          </div>
-
-        </article>
+        <li class="path-list-item">
+          <a href="${item.path}">
+            ${item.path}
+          </a>
+        </li>
       `).join('')}
-    </div>
+    </ul>
   `;
 }
