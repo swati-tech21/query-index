@@ -2,6 +2,7 @@ export default async function decorate(block) {
   const rows = [...block.children];
 
   const path = rows[1]?.textContent.trim();
+  console.log("path",path);
 
   if (!path) {
     block.innerHTML = '<p>List path is not configured.</p>';
