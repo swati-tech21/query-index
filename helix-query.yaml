@@ -2,7 +2,7 @@ auto-generated: true
 indices:
   main:
     include:
-      - /recipe-listing/**
+      - /**
     target: /query-index.json
     properties:
       title:
