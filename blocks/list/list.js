@@ -1,4 +1,5 @@
 export default async function decorate(block) {
+    console.log(block);
   const path = block.children[1]?.textContent.trim();
 
   console.log('List path:', path);
