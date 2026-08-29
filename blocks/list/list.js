@@ -8,7 +8,7 @@ export default async function decorate(block) {
     return;
   }
 
-  const response = await fetch('/query-index.json');
+  const response = await fetch('/list-index.json');
 
   if (!response.ok) {
     block.innerHTML = '<p>Unable to load content.</p>';
